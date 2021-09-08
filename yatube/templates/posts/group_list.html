@@ -7,7 +7,7 @@
     <p>
         {{ group.description }}
     </p>
-    {% for post in posts %}
+    {% for post in page_obj %}
         <ul>
           <li>
             Автор: {{ post.author.get_full_name }}
@@ -17,7 +17,9 @@
           </li>
         </ul>
         <p>{{ post.text|linebreaksbr }}</p>
+        <a href="{% url 'posts:post_detail' post.id %}">Подробная информация</a> 
         <hr>
     {% endfor %}
-  </div>  
+  </div> 
+{% include '../includes/paginator.html' %} 
 {% endblock %}

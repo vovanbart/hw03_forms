@@ -20,11 +20,14 @@ def group_posts(request, slug):
     template = 'posts/group_list.html'
     group = get_object_or_404(Group, slug=slug)
     posts = group.posts.all()
+    paginator = Paginator(posts, 10)
+    page_num = request.GET.get('page')
+    page_obj = paginator.get_page(page_num)
     title = f'Записи сообщества <{group}>'
     context = {
         'group': group,
         'title': title,
-        'posts': posts,
+        'page_obj': page_obj,
     }
     return render(request, template, context)
 
