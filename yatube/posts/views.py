@@ -37,11 +37,10 @@ def profile(request, username):
     page_num = request.GET.get('page')
     page_obj = paginator.get_page(page_num)
     context = {
-        'post_count':post_count,
-        'paginator':paginator,
-        'author':author,
-        'page_obj':page_obj,
-                }
+        'post_count': post_count,
+        'paginator': paginator,
+        'author': author,
+        'page_obj': page_obj, }
     return render(request, 'posts/profile.html', context)
 
 
@@ -49,10 +48,10 @@ def post_detail(request, post_id):
     post_count = Post.objects.count()
     post = get_object_or_404(Post, id=post_id)
     context = {
-        'post_count':post_count,
-        'post':post,
+        'post_count': post_count,
+        'post': post,
     }
-    return render(request, 'posts/post_detail.html', context) 
+    return render(request, 'posts/post_detail.html', context)
 
 
 @login_required
