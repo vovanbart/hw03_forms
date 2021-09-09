@@ -1,3 +1,4 @@
+from yatube.settings import PST_ON_PAGE
 from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Post, Group, User
@@ -6,8 +7,8 @@ from django.contrib.auth.decorators import login_required
 
 
 def index(request):
-    post_list = Post.objects.all().order_by('-pub_date')
-    paginator = Paginator(post_list, 10)
+    post_list = Post.objects.all()
+    paginator = Paginator(post_list, PST_ON_PAGE)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     context = {
@@ -20,7 +21,7 @@ def group_posts(request, slug):
     template = 'posts/group_list.html'
     group = get_object_or_404(Group, slug=slug)
     posts = group.posts.all()
-    paginator = Paginator(posts, 10)
+    paginator = Paginator(posts, PST_ON_PAGE)
     page_num = request.GET.get('page')
     page_obj = paginator.get_page(page_num)
     title = f'Записи сообщества <{group}>'
@@ -34,9 +35,9 @@ def group_posts(request, slug):
 
 def profile(request, username):
     author = get_object_or_404(User, username=username)
-    post_count = Post.objects.filter(author=author).count()
-    post_list = Post.objects.order_by("-pub_date").filter(author=author)
-    paginator = Paginator(post_list, 10)
+    post_list = author.posts.all()
+    post_count = post_list.count()
+    paginator = Paginator(post_list, PST_ON_PAGE)
     page_num = request.GET.get('page')
     page_obj = paginator.get_page(page_num)
     context = {
@@ -77,5 +78,5 @@ def post_create(request):
         post = form.save(commit=False)
         post.author = request.user
         post.save()
-        return redirect('/profile/{}/'.format(request.user))
+        return redirect('posts:profile', username=request.user.username)
     return render(request, 'posts/create_post.html', {'form': form})

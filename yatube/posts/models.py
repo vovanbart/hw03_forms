@@ -5,16 +5,23 @@ User = get_user_model()
 
 
 class Group(models.Model):
-    title = models.CharField(max_length=200)
-    slug = models.SlugField(unique=True)
-    description = models.TextField(max_length=400)
+    title = models.CharField(max_length=200,
+                             help_text='Введите название группы',
+                             verbose_name='Название группы')
+    slug = models.SlugField(unique=True,
+                            help_text='Введите адрес группы',
+                            verbose_name='Адрес группы')
+    description = models.TextField(max_length=400,
+                                   help_text='Введите описание группы',
+                                   verbose_name='Описание группы')
 
     def __str__(self):
         return self.title
 
 
 class Post(models.Model):
-    text = models.TextField()
+    text = models.TextField(help_text='Введите текст поста',
+                            verbose_name='текст поста')
     pub_date = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(
         User,
